@@ -5,7 +5,7 @@ class Enemy
   
   int m_width = 40;
   int m_height = 10;
-  float m_speed = 0.5f;
+  float m_speed = 1f;
   
   float m_previousYPos;
   float m_downAmount = 50.0f;

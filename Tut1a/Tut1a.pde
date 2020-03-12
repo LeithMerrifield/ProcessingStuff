@@ -4,12 +4,14 @@ float deltaTime = 0;
 float previousTime = 0;
 float newTime = 0;
 
+boolean GameOver = false;
 int enemyWidth = 50;
 int enemyHeight = 10;
+int enemyAmount = 30;
 
 void setup()
 {
-  size(1400,500);
+  size(500,500);
   smooth();
   frameRate(60);
   player = new Player();
@@ -27,6 +29,12 @@ void draw()
   clear();
   //background(0,255,0);
   
+  if(GameOver)
+  {
+    GameEnd();
+    return;
+  }
+  
   for(int i = 0; i < enemies.size(); ++i)
   {
     Enemy enemy = enemies.get(i);
@@ -36,7 +44,8 @@ void draw()
        player.m_yPos < enemy.m_yPos + enemy.m_height &&
        player.m_yPos + player.m_Height > enemy.m_yPos)
        {
-         print("yes");
+         GameOver = true;
+         return;
        }
   }
   
@@ -67,12 +76,29 @@ void keyReleased()
   player.KeyReleased();
 }
 
+void Enemies()
+{
+  
+}
+
+void Player()
+{
+}
+
+void GameEnd()
+{
+  String endText = "GAME OVER";
+  textSize(32);
+  textAlign(CENTER,CENTER);
+  text(endText,width / 2,height / 2);
+}
+
 void EnemySpawn()
 {
   int x = 0;
   int row = 1;
   int rowSpacing = 50;
-  for(int i = 0; i < 150; i++)
+  for(int i = 0; i < enemyAmount; i++)
   {
 
     if(!(row % 2 == 0))
