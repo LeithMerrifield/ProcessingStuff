@@ -5,7 +5,7 @@ class Enemy
   
   int m_width = 40;
   int m_height = 10;
-  float m_speed = 1f;
+  float m_speed = .5f;
   
   float m_previousYPos;
   float m_downAmount = 50.0f;
@@ -14,6 +14,9 @@ class Enemy
   ENEMYSTATE m_previousState;
   int m_row = 0;
   
+  ArrayList<Bullet> m_bullets = new ArrayList<Bullet>();
+  int m_bulletCount = 0;
+    
   boolean m_directionFlag = false;
   
   Enemy(int x, int y, int newWidth, int newHeight)
@@ -26,6 +29,7 @@ class Enemy
   
   void OnUpdate()
   {
+    UpdateBullets();
     BoundaryCheck();
     Movement();
   }
@@ -34,6 +38,11 @@ class Enemy
   {
     rect(m_xPos + (m_width / 2) / 2, m_yPos - m_height /2,m_width / 2,m_height / 2);
     rect(m_xPos, m_yPos,m_width,m_height);
+    
+    for(int i = 0; i < m_bulletCount; i++)
+    {
+      m_bullets.get(i).OnDraw();
+    }
   }
   
   void Movement()
@@ -90,6 +99,27 @@ class Enemy
     if(m_speed < 0.0f)
     {
       m_speed = 0.0f;
+    }
+  }
+  
+  void Shoot()
+  {
+    m_bullets.add(new Bullet((int)m_xPos,(int)m_yPos,OWNER.ENEMY));
+    m_bulletCount += 1;
+  }
+  
+  // Makes sure bullets get destroyed when moving off screen
+  // Also if a bullet has been flagged to be destroyed
+  void UpdateBullets()
+  {
+    for(int i = 0; i < m_bulletCount; i++)
+    {
+      m_bullets.get(i).OnUpdate();
+      if(m_bullets.get(i).m_yPos >= height || !m_bullets.get(i).m_isActive)
+      {
+        m_bullets.remove(i);
+        m_bulletCount -= 1;
+      }
     }
   }
 }

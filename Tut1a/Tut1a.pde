@@ -1,5 +1,6 @@
 Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+Blocker test;
 float deltaTime = 0;
 float previousTime = 0;
 float newTime = 0;
@@ -15,7 +16,7 @@ void setup()
   smooth();
   frameRate(60);
   player = new Player();
-  
+  test = new Blocker(width - 200,height - 200,100,50);
   EnemySpawn();
 }
 
@@ -27,13 +28,14 @@ void draw()
   deltaTime = (newTime - previousTime) / 1000;
   
   clear();
-  //background(0,255,0);
   
   if(GameOver)
   {
     GameEnd();
     return;
   }
+  
+  EnemyShoot();
   
   for(int i = 0; i < enemies.size(); ++i)
   {
@@ -49,6 +51,7 @@ void draw()
        }
   }
   
+  test.OnDraw();
   for(Enemy enemy : enemies)
   {
       enemy.OnUpdate();
@@ -76,13 +79,15 @@ void keyReleased()
   player.KeyReleased();
 }
 
-void Enemies()
+void EnemyShoot()
 {
-  
-}
-
-void Player()
-{
+  for(Enemy enemy : enemies)
+  {
+    if(enemy.m_yPos == enemies.get(enemies.size() - 1).m_yPos)
+    {
+      enemy.Shoot();
+    }
+  }
 }
 
 void GameEnd()
@@ -153,56 +158,3 @@ void ChangeEnemySpeed()
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-void myCircle()
-{
-  clear();
-  ellipse(xPos,xPos,10,10);
-  
-  if(xPos >= height)
-    flag = false;
-  else if(xPos == 0)
-    flag = true;
-  
-  if(flag)
-    xPos += 1;
-  else
-    xPos -= 1;
-}
-*/
-
-
-/*
-void myLine()
-{
-  stroke(0,255,0);
-  strokeWeight(5);
-  line(50,0,50,300);
-}
-*/

@@ -71,7 +71,7 @@ class Player
               return;
             
             m_shotFlag = true; 
-            m_bullets.add(new Bullet(m_xPos,m_yPos));
+            m_bullets.add(new Bullet(m_xPos,m_yPos,OWNER.PLAYER));
             m_bulletCount += 1;
             break;
         }
