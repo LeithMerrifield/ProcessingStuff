@@ -29,11 +29,6 @@ class Blocker
     }
   }
   
-  void OnUpdate()
-  {
-        
-  }
-  
   void OnDraw()
   {
     for(Block block : m_blocks)

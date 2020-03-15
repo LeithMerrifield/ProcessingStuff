@@ -24,7 +24,12 @@ class Bullet
       case ENEMY:
         break;
     }
-    test.CheckCollision(this);
+
+    for(Blocker block : blockers)
+      block.CheckCollision(this);
+
+    if(m_yPos <= 0 || m_yPos >= height)
+      m_isActive = false;
   }
   
   void OnDraw()

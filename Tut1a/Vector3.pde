@@ -88,5 +88,4 @@ static class Vector3
     y /= mag;
     z /= mag;
   }
-  
 }

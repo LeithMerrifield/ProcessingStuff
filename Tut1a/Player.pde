@@ -43,7 +43,7 @@ class Player
     for(int i = 0; i < m_bulletCount; i++)
     {
       m_bullets.get(i).OnUpdate();
-      if(m_bullets.get(i).m_yPos <= 0 || !m_bullets.get(i).m_isActive)
+      if(!m_bullets.get(i).m_isActive)
       {
         m_bullets.remove(i);
         m_bulletCount -= 1;

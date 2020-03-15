@@ -7,17 +7,20 @@ class Enemy
   int m_height = 10;
   float m_speed = .5f;
   
-  float m_previousYPos;
-  float m_downAmount = 50.0f;
+  private float m_previousYPos;
+  private float m_downAmount = 50.0f;
   
   ENEMYSTATE m_state = ENEMYSTATE.RIGHT;
-  ENEMYSTATE m_previousState;
+  private ENEMYSTATE m_previousState;
   int m_row = 0;
   
   ArrayList<Bullet> m_bullets = new ArrayList<Bullet>();
-  int m_bulletCount = 0;
-    
-  boolean m_directionFlag = false;
+  private int m_bulletCount = 0;
+  private int m_firingCooldown = 5;
+  private float m_lastFired;  
+  private boolean m_hasFired = false;
+
+  private boolean m_directionFlag = false;
   
   Enemy(int x, int y, int newWidth, int newHeight)
   {
@@ -44,7 +47,9 @@ class Enemy
       m_bullets.get(i).OnDraw();
     }
   }
-  
+
+  // handles the movement of the enemy.
+  // depending on the state will result on which movement 
   void Movement()
   {
     if(m_state == ENEMYSTATE.DOWN)
@@ -69,12 +74,14 @@ class Enemy
       }
     }
     
+    // basic left and right movement
     else if(m_state == ENEMYSTATE.RIGHT)
       m_xPos += m_speed * deltaTime * 100;
     else if(m_state == ENEMYSTATE.LEFT)
       m_xPos -= m_speed * deltaTime * 100;
   }
   
+  // changes the state once it hits the edge
   void BoundaryCheck()
   {
     if((m_xPos + m_width) >= width && m_state != ENEMYSTATE.DOWN && m_state != ENEMYSTATE.LEFT)
@@ -93,6 +100,7 @@ class Enemy
     }
   }
   
+  // allows for control of speed
   void ChangeSpeed(float speed)
   {
     m_speed += speed;
@@ -104,8 +112,24 @@ class Enemy
   
   void Shoot()
   {
-    m_bullets.add(new Bullet((int)m_xPos,(int)m_yPos,OWNER.ENEMY));
-    m_bulletCount += 1;
+    if(m_hasFired)
+    {
+      if(millis() / 1000 - m_lastFired > m_firingCooldown)
+      {
+        m_hasFired = false;
+      }
+      else
+        return;
+    }
+
+    // 50/50 chance to shoot once cooldown is over
+    if(random(0,50) >= 25)
+    {
+      m_bullets.add(new Bullet((int)m_xPos,(int)m_yPos,OWNER.ENEMY));
+      m_bulletCount += 1;
+    }
+    m_lastFired = millis() / 1000;
+    m_hasFired = true;
   }
   
   // Makes sure bullets get destroyed when moving off screen

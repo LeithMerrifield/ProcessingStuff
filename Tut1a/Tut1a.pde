@@ -1,22 +1,24 @@
 Player player;
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-Blocker test;
+ArrayList<Blocker> blockers = new ArrayList<Blocker>();
 float deltaTime = 0;
 float previousTime = 0;
 float newTime = 0;
 
-boolean GameOver = false;
+boolean isGameOver = false;
 int enemyWidth = 50;
 int enemyHeight = 10;
-int enemyAmount = 30;
+int enemyAmount = 90;
+int blockerAmount = 5;
 
 void setup()
 {
-  size(500,500);
-  smooth();
+  size(900,900);
+  noSmooth();
   frameRate(60);
   player = new Player();
-  test = new Blocker(width - 200,height - 200,100,50);
+
+  BlockerSpawn();
   EnemySpawn();
 }
 
@@ -28,15 +30,40 @@ void draw()
   deltaTime = (newTime - previousTime) / 1000;
   
   clear();
-  
-  if(GameOver)
-  {
-    GameEnd();
+
+  if(GameOverCheck())
     return;
-  }
   
   EnemyShoot();
   
+  for(Blocker block : blockers)
+  {
+    block.OnDraw();
+  }
+  
+  //Update Phase
+  for(Enemy enemy : enemies)
+      enemy.OnUpdate();
+  
+  player.OnUpdate();
+  
+  // Drawing Phase
+  for(Enemy enemy : enemies)
+  {
+      enemy.OnDraw();
+  }
+  
+  player.OnDraw();
+}
+
+boolean GameOverCheck()
+{
+  if(isGameOver)
+  {
+    GameEnd();
+    return true;
+  }
+
   for(int i = 0; i < enemies.size(); ++i)
   {
     Enemy enemy = enemies.get(i);
@@ -46,39 +73,28 @@ void draw()
        player.m_yPos < enemy.m_yPos + enemy.m_height &&
        player.m_yPos + player.m_Height > enemy.m_yPos)
        {
-         GameOver = true;
-         return;
+         isGameOver = true;
+         return true;
        }
   }
-  
-  test.OnDraw();
-  for(Enemy enemy : enemies)
-  {
-      enemy.OnUpdate();
-  }
-  
-  player.OnUpdate();
-  
-  for(Enemy enemy : enemies)
-  {
-      enemy.OnDraw();
-  }
-  
-  player.OnDraw();
-  //println(deltaTime);
+  return false;
 }
 
+// fires when a key is pressed
 void keyPressed() 
 {
   player.KeyPressed();
   ChangeEnemySpeed();
 }
 
+// fires when a key is released
 void keyReleased()
 {
   player.KeyReleased();
 }
 
+// Only the enemies on the lowest row will shoot
+// subject to change
 void EnemyShoot()
 {
   for(Enemy enemy : enemies)
@@ -90,6 +106,7 @@ void EnemyShoot()
   }
 }
 
+// if the player days then runs
 void GameEnd()
 {
   String endText = "GAME OVER";
@@ -98,6 +115,7 @@ void GameEnd()
   text(endText,width / 2,height / 2);
 }
 
+// enemy spawning that scales with screen size
 void EnemySpawn()
 {
   int x = 0;
@@ -136,6 +154,17 @@ void EnemySpawn()
       x++;
     }
   }
+}
+
+void BlockerSpawn()
+{
+  int offset = 200;
+  
+  for(int i = 0; i < blockerAmount; i++)
+  {
+    blockers.add(new Blocker(10 + offset * i, height - 200, 100,50));
+  }
+  //blockers.add(new Blocker(width - 200,height - 200,100,50));
 }
 
 void ChangeEnemySpeed()
