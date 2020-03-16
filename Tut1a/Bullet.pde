@@ -7,9 +7,16 @@ class Bullet
   boolean m_isActive = true;
   OWNER m_owner;
   
-  Bullet(int x, int y, OWNER myOwner)
+  ArrayList<Enemy> enemies;
+  ArrayList<Blocker> blockers;
+  Player player;
+  
+  Bullet(int x, int y, int myWidth, OWNER myOwner,
+         ArrayList<Enemy> enemy,ArrayList<Blocker> blocks)
   {
-    m_xPos = x + player.m_Width / 2 - (m_width / 2);
+    enemies = enemy;
+    blockers = blocks;
+    m_xPos = x + myWidth / 2 - (m_width / 2);
     m_yPos = y;
     m_owner = myOwner;
   }

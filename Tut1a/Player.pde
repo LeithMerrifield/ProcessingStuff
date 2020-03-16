@@ -10,11 +10,17 @@ class Player
   boolean[] m_buttons = new boolean[3];
   boolean m_shotFlag = false;
   
-  ArrayList<Bullet> m_bullets = new ArrayList<Bullet>();
+  ArrayList<Bullet> m_bullets = new ArrayList<Bullet>();  
+  
+  ArrayList<Enemy> enemies;
+  ArrayList<Blocker> blockers;
+  
   int m_bulletCount = 0;
   
-  Player()
+  Player(ArrayList<Enemy> enemy,ArrayList<Blocker> blocks)
   {
+    enemies = enemy;
+    blockers = blocks;
     m_xPos = width / 2;
     m_yPos = height - m_Height - 10;
   }
@@ -71,7 +77,7 @@ class Player
               return;
             
             m_shotFlag = true; 
-            m_bullets.add(new Bullet(m_xPos,m_yPos,OWNER.PLAYER));
+            m_bullets.add(new Bullet(m_xPos,m_yPos,m_Width,OWNER.PLAYER,enemies,blockers));
             m_bulletCount += 1;
             break;
         }
@@ -96,7 +102,7 @@ class Player
       m_buttons[1] = true;
     }
     
-    if(key == ' ' && !m_shotFlag) //<>//
+    if(key == ' ' && !m_shotFlag) //<>// //<>//
     {
       m_buttons[2] = true;
     }

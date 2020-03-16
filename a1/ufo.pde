@@ -3,7 +3,7 @@
   Description: Holds the UFO class that is responsible for all of its logic
                including edge detection and collision
   Date: 8/03/2020
-  Modified: 9/03/20
+  Modified: 16/03/20
 */
 
  class Ufo
@@ -79,8 +79,6 @@
     {
       direction.x *= -1;
       velocity.x *= -1;
-      float temp = position.x;
-      position.x = (-1*temp);
     }
     
     // Top and Bottom
@@ -94,8 +92,6 @@
     {
       direction.y *= -1;
       velocity.y *= -1;
-      float temp = position.y;
-      position.y = (-1*temp);
     }
   }
   

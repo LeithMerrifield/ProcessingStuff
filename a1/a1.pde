@@ -7,7 +7,7 @@
 
 PImage bimg;
 ArrayList<Ufo> UFOs = new ArrayList<Ufo>();
-int ufoCount = 20;
+int ufoCount = 10;
 
 void setup()
 {

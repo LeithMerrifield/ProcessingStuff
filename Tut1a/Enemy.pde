@@ -15,15 +15,21 @@ class Enemy
   int m_row = 0;
   
   ArrayList<Bullet> m_bullets = new ArrayList<Bullet>();
+  ArrayList<Enemy> enemies;
+  ArrayList<Blocker> blockers;
+  
   private int m_bulletCount = 0;
-  private int m_firingCooldown = 5;
+  private int m_firingCooldown = 2;
   private float m_lastFired;  
   private boolean m_hasFired = false;
 
   private boolean m_directionFlag = false;
   
-  Enemy(int x, int y, int newWidth, int newHeight)
+  Enemy(int x, int y, int newWidth, int newHeight,
+        ArrayList<Enemy> enemy,ArrayList<Blocker> blocks)
   {
+    enemies = enemy;
+    blockers = blocks;
     m_xPos = x;
     m_yPos = y;
     m_width = newWidth;
@@ -125,7 +131,7 @@ class Enemy
     // 50/50 chance to shoot once cooldown is over
     if(random(0,50) >= 25)
     {
-      m_bullets.add(new Bullet((int)m_xPos,(int)m_yPos,OWNER.ENEMY));
+      m_bullets.add(new Bullet((int)m_xPos,(int)m_yPos,m_width,OWNER.ENEMY,enemies,blockers));
       m_bulletCount += 1;
     }
     m_lastFired = millis() / 1000;
